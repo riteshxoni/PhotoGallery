@@ -1,3 +1,12 @@
+<?php 
+    session_start();
+    if(isset($_SESSION['username']))
+    {
+        header("Location: /photogallary/index.php?result=Already logged in");
+        exit;
+    }
+    session_abort();
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -33,8 +42,17 @@
                 Register Here
             </div>
             <div class="row">
+                <?php 
+                        if(isset($_GET['result']))
+                        {
+                            if(isset($_GET['result']))
+                            {
+                               echo "<div class='my-3 alert alert-success'>".$_GET['result']."</div>";
+                            }
+                        }
+                    ?>
                 <div class="col-12">
-                    <form action="" method="post" class="bg-body-tertiary p-3 rounded mt-2 mb-5 ">
+                    <form action="../controller/Register.php" method="post" class="bg-body-tertiary p-3 rounded mt-2 mb-5 ">
 
                         <!-- Name -->
                         <div class="mb-3">
@@ -80,28 +98,44 @@
                                 required>
                         </div>
 
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                name="cpassword" 
+                                class="form-control" 
+                                placeholder="Confirm password" 
+                                required>
+                        </div>
+
                         <!-- Gender -->
                         <div class="mb-3">
                             <label class="form-label d-block">Gender</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" value="Male" required>
+                                <input class="form-check-input" type="radio" name="gender" value="male" required>
                                 <label class="form-check-label">Male</label>
                             </div>
 
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" value="Female">
+                                <input class="form-check-input" type="radio" name="gender" value="female">
                                 <label class="form-check-label">Female</label>
                             </div>
 
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" value="Other">
+                                <input class="form-check-input" type="radio" name="gender" value="other">
                                 <label class="form-check-label">Other</label>
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Portfolio Link</label>
+                            <input class="form-control" type="url" name="portfolio" placeholder="eg. riteshxoni.netlify.app" >
+                        </div>
+
                         <!-- Submit -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" name="register">
                                 Register
                             </button>
                         </div>

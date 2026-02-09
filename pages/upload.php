@@ -1,3 +1,12 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['username']))
+    {
+        header("Location: /photogallary/pages/login.php?result=Please Login First...");
+        exit;
+    }
+    session_abort();
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -33,11 +42,24 @@
                 Upload Photo
             </div>
             <div class="row">
+                <?php 
+                        if(isset($_GET['result']))
+                        {
+                            if(isset($_GET['result']))
+                            {
+                               echo "<div class='my-3 alert alert-secondary'>".$_GET['result']."</div>";
+                            }
+                        }
+                    ?>
                 <div class="col-12">
-                    <form action="" method="" class="p-2 rounded bg-body-tertiary">
+                    <form action="../controller/UploadPost.php" method="post" class="p-2 rounded bg-body-tertiary" enctype="multipart/form-data">
                         <div class="p-2">
                             <label class="form-label">Title</label>
                             <input type="text" name="title" class="form-control" required placeholder="Enter Title Here">
+                        </div>
+                        <div class="p-2">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-control" required placeholder="eg. Nature">
                         </div>
                         <div class="p-2">
                             <label class="form-label">Description</label>
@@ -45,10 +67,10 @@
                         </div>
                         <div class="p-2">
                             <label class="form-label">Photo</label>
-                            <input type="file" name="title" class="form-control" required >
+                            <input type="file" name="img" class="form-control" required >
                         </div>
                         <div class="p-2">
-                            <button type="submit" class="btn btn-secondary my-3">Upload Photo</button>
+                            <button type="submit" class="btn btn-secondary my-3" name="upload">Upload Photo</button>
                         </div>
                         
                     </form>

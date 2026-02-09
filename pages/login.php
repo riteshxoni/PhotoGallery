@@ -1,3 +1,12 @@
+<?php 
+    session_start();
+    if(isset($_SESSION['username']))
+    {
+        header("Location: /photogallary/index.php?result=Already logged in");
+        exit;
+    }
+    session_abort();
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -33,17 +42,26 @@
                 Login Here
             </div>
             <div class="row">
+                <?php 
+                        if(isset($_GET['result']))
+                        {
+                            if(isset($_GET['result']))
+                            {
+                               echo "<div class='my-3 alert alert-danger'>".$_GET['result']."</div>";
+                            }
+                        }
+                    ?>
                 <div class="col-12">
-                    <form action="" method="post" class="bg-body-tertiary p-3 rounded mt-2 mb-5">
+                    <form action="../controller/Login.php" method="post" class="bg-body-tertiary p-3 rounded mt-2 mb-5">
                         
                         <!-- Username -->
                         <div class="mb-3">
-                            <label class="form-label">Username</label>
+                            <label class="form-label">Username / Email</label>
                             <input 
                                 type="text" 
-                                name="username" 
+                                name="user" 
                                 class="form-control" 
-                                placeholder="Enter username" 
+                                placeholder="Enter username / email" 
                                 required>
                         </div>
 
@@ -60,7 +78,7 @@
 
                         <!-- Submit -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" name="login">
                                 Login
                             </button>
                         </div>

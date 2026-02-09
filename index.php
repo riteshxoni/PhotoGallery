@@ -1,3 +1,19 @@
+<?php
+require './config/db.php';
+
+try 
+{
+  $sql = "SELECT id, username, image_url, subject, created FROM post";
+  // Execute the SQL query
+  $result = $conn->query($sql);
+} 
+catch(PDOException $e) 
+{
+  echo "Error: " . $e->getMessage();
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -16,31 +32,43 @@
 
 <body>
     <!-- Header -->
-     <?php include './includes/header.php' ?>
+    <?php include './includes/header.php' ?>
     <main class="">
         <!-- Banner -->
          <div class="banner my-3">
             <img src="./assets/img/banner.png" alt="">
          </div>
          <div class="container">
-            <div class="display-4 my-3 text-primary">
+            <div class="display-4 my-3 text-primary text-center">
                 Latest Photos
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card" style="width: 18rem;">
-                        <div class="post-img">
-                            <img src="./assets/img/uploads/1.png" class="card-img-top" alt="...">
-                            <div class="overlay">
-                                <span>Nature</span>
+            <div class="row justify-content-center g-3">
+                <!-- Process the result set -->
+                <?php if($result->rowCount() > 0): ?>
+                <!-- Output data of each row -->
+                    <?php while($row = $result->fetch()): ?>
+                            <div class="col-8 col-sm-6 col-md-4 col-lg-3">
+                                <a href="./pages/post.php?id=<?php echo $row['id'] ?>" class="text-decoration-none text-dark">
+                                    <div class="card">
+                                        <div class="post-img">
+                                            <img src="<?php echo './uploads/' . $row['image_url'] ?>" class="card-img-top" alt="..." style="height: 300px;">
+                                            <div class="overlay">
+                                                <span><?php echo $row['subject'] ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body small">
+                                            <span class="card-link"><?php echo $row['created'] ?></span>
+                                            <span class="card-link float-end">by <?php echo $row['username'] ?></span>
+                                            <a href="#" class="btn btn-primary my-2">Read More</a>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <span class="card-link">07 Feb 2026</span>
-                            <span class="card-link float-end">by Ritesh Soni</span>
-                        </div>
-                    </div>
-                </div>
+                        
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="display-3 my-5 text-danger">No post found.</div>
+                <?php endif; ?>
             </div>
          </div>
          
