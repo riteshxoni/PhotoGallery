@@ -1,16 +1,37 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['username']))
+<?php
+require '../config/db.php';
+session_start();
+if(isset($_GET['id']) && isset($_SESSION['username']))
+{
+    $id = $_GET['id'];
+    try 
     {
-        header("Location: /photogallary/pages/login.php?result=Please Login First...");
-        exit;
+        $sql = "SELECT * FROM post where id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$id]);
+        $post = $stmt->fetch(PDO::FETCH_OBJ);
+        if(!$post)
+        {
+            header("Location: ../index.php?result=Please correct id.");
+            exit;
+        }
+    } 
+    catch(PDOException $e) 
+    {
+    echo "Error: " . $e->getMessage();
     }
-    session_abort();
+}
+else
+{
+    header("Location: ../index.php?result=Please provide id.");
+    exit;
+}
+session_abort();
 ?>
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Upload Post</title>
+        <title>Update Post</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
@@ -39,7 +60,7 @@
          </div>
          <div class="container">
             <div class="display-4 my-3 text-primary">
-                Upload Post
+                Upload Photo
             </div>
             <div class="row">
                 <?php 
@@ -52,25 +73,29 @@
                         }
                     ?>
                 <div class="col-12">
-                    <form action="../controller/UploadPost.php" method="post" class="p-2 rounded bg-body-tertiary" enctype="multipart/form-data">
+                    <form action="../controller/UpdatePost.php" method="post" class="p-2 rounded bg-body-tertiary" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="<?php echo $post->id ?>">
                         <div class="p-2">
                             <label class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" required placeholder="Enter Title Here">
+                            <input type="text" name="title" class="form-control" required placeholder="Enter Title Here" value="<?php echo $post->title ?>">
                         </div>
                         <div class="p-2">
                             <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" required placeholder="eg. Nature">
+                            <input type="text" name="subject" class="form-control" required placeholder="eg. Nature" value="<?php echo $post->subject ?>">
                         </div>
                         <div class="p-2">
                             <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="5" placeholder="Enter Description Here"></textarea>
+                            <textarea name="description" class="form-control" rows="5" placeholder="Enter Description Here">
+                                <?php echo $post->description ?>
+                            </textarea>
                         </div>
                         <div class="p-2">
+                            <img src="<?php echo "../uploads/" . $post->image_url ?>" height="100px" alt="">
                             <label class="form-label">Photo</label>
                             <input type="file" name="img" class="form-control" required >
                         </div>
                         <div class="p-2">
-                            <button type="submit" class="btn btn-secondary my-3" name="upload">Upload Photo</button>
+                            <button type="submit" class="btn btn-secondary my-3" name="update">Update Post</button>
                         </div>
                         
                     </form>

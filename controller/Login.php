@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']))
     exit;
 }
 
- try 
- {
+    try 
+    {
         // 1. Fetch only the user by username / email
         $sql = "SELECT username, password FROM users WHERE username = ? or email = ?";
         $stmt = $conn->prepare($sql);
@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']))
             header("Location: ../pages/login.php?result=Invalid username or password.");
             exit;
         }
-    } catch (PDOException $e) {
+    } 
+    catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }

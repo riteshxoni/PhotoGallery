@@ -30,7 +30,7 @@
                             <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                                 <li>
                                 <span class="dropdown-item-text">
-                                    <a class="text-dark text-decoration-none" href="/PHOTOGALLARY/index.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+                                    <a class="text-dark text-decoration-none" href="/PHOTOGALLARY/pages/profile.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
                                 </span>
                                 </li>
                                 <li><a class="dropdown-item" href="/PHOTOGALLARY/pages/upload.php">New Photo...</a></li>
